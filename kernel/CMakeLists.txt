@@ -1,1 +1,2 @@
 ENABLE_LANGUAGE(C CXX ASM-ATT)
+INCLUDE(arch/$ARCH/$SYSTEM/config.cmake)
