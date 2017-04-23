@@ -4,3 +4,4 @@ binutils/
 gawk/
 builddir/
 config.cmake
+config.h

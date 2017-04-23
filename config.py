@@ -41,3 +41,15 @@ with open("config.cmake", "w") as f:
             f.write('SET('+key+' 1)\n')
         elif val != False:
             f.write('SET('+key+' '+str(val)+')\n')
+
+with open("config.h", "w") as f:
+    for key, val in config.items():
+        if val == True:
+            f.write("#define "+key+" 1\n")
+        elif val == False:
+            f.write("#undef "+key+"\n")
+        elif isinstance(val, int):
+            f.write("#define "+key+" ("+str(val)+")\n")
+        else:
+            f.write("#define "+key+' "'+val+'"\n')
+
