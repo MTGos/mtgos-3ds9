@@ -5,3 +5,4 @@ gawk/
 builddir/
 config.cmake
 config.h
+gen*.h
