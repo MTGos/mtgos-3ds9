@@ -8,3 +8,5 @@ config.h
 gen*.h
 build/
 __pycache__/
+kernel
+*.iso
