@@ -28,6 +28,12 @@ def get_yes_no(p, default=None):
         if (x == "") and default is not None:
             return default
     return x in "yY"
+def add_driver(common, name):
+    if common:
+        drivers.append("hw/"+name+"/")
+    else:
+        drivers.append("hw/"+config["SYSTEM"]+"/"+name+"/")
+drivers=[]
 config={}
 config["ARCH"] = get_from_list("Architecture", ["x86","x86_64","arm"])
 exec(open("kernel/arch/"+config["ARCH"]+"/config.py").read())
@@ -41,6 +47,8 @@ with open("config.cmake", "w") as f:
             f.write('SET('+key+' 1)\n')
         elif val != False:
             f.write('SET('+key+' '+str(val)+')\n')
+    for driver in drivers:
+        f.write("SET(DRIVER_SRCS ${DRIVER_SRCS} "+driver+"*.c "+driver+"*.cpp "+driver+"*.s)\n")
 
 with open("config.h", "w") as f:
     for key, val in config.items():

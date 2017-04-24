@@ -6,3 +6,5 @@ builddir/
 config.cmake
 config.h
 gen*.h
+build/
+__pycache__/

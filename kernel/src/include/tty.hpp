@@ -1,6 +1,6 @@
 #pragma once
 #include <kobject.hpp>
-enum Color {
+enum class Color {
     BLACK,
     BLUE,
     GREEN,
@@ -8,7 +8,7 @@ enum Color {
     RED,
     MAGENTA,
     BROWN,
-    LIGHT_GREY,
+    LIGHT_GRAY,
     GRAY,
     LIGHT_BLUE,
     LIGHT_GREEN,
