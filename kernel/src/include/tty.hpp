@@ -1,5 +1,5 @@
 #pragma once
-#include <kobject.h>
+#include <kobject.hpp>
 enum Color {
     BLACK,
     BLUE,

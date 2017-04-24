@@ -9,25 +9,25 @@ class Kref {
         kobjectType type;
         void *ptr;
         unsigned int refctr;
-        bool set;
-        Kobject(kobjectType type) {
+        bool mset;
+        Kref(kobjectType type) {
             this->type = type;
             refctr = 1;
-            set = false;
+            mset = false;
         }
         template<typename T>
-        auto set(T *data) -> Kobject & {
-            if(set)
+        auto set(T *data) -> Kref & {
+            if(mset)
                 return *this;
             ptr = (void*)data;
-            set=true;
+            mset=true;
             return *this;
         }
         template<typename T>
         T *get() {
             return (T*)ptr;
         }
-        auto operator++(int) -> Kobject & {
+        auto operator++(int) -> Kref & {
             unsigned int old = refctr;
             refctr++;
             if(old > refctr) {
@@ -37,11 +37,11 @@ class Kref {
             }
             return *this;
         }
-        auto operator--(int) -> Kobject & {
+        auto operator--(int) -> Kref & {
             refctr--;
             if(!refctr) {
                 //delete ptr;
-                set = false;
+                mset = false;
                 ptr = nullptr;
             }
             return *this;
@@ -49,9 +49,9 @@ class Kref {
 };
 class Kobject {
     public:
-        KobjectType type;
+        kobjectType type;
         unsigned int refctr;
-        Kobject(KobjectType type):type(type),refctr(1) {}
+        Kobject(kobjectType type):type(type),refctr(1) {}
         virtual ~Kobject() {
             refctr=0;
         }
@@ -72,4 +72,4 @@ class Kobject {
             }
             return *this;
         }
-}
+};
