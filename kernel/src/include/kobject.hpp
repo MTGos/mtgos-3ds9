@@ -2,8 +2,9 @@
 enum class kobjectType {
     POINTER, //Pointer to non-object
     KOBJECT, //garbage collected kobject
+    TTY,
 };
-class Kobject {
+class Kref {
     public:
         kobjectType type;
         void *ptr;
@@ -46,3 +47,29 @@ class Kobject {
             return *this;
         }
 };
+class Kobject {
+    public:
+        KobjectType type;
+        unsigned int refctr;
+        Kobject(KobjectType type):type(type),refctr(1) {}
+        virtual ~Kobject() {
+            refctr=0;
+        }
+        virtual auto operator++() -> Kobject & {
+            unsigned int tmp=refctr;
+            refctr++;
+            if(refctr < tmp) {
+                //TODO panic("Refcounter overflow");
+                for(;;);
+            }
+            return *this;
+        }
+        virtual auto operator--() -> Kobject & {
+            refctr--;
+            if(refctr == 0) {
+                //TODO delete this;
+                return *((Kobject*)nullptr);
+            }
+            return *this;
+        }
+}

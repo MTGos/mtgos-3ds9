@@ -1,5 +1,5 @@
 #include <tty.hpp>
-TTY::TTY(int width, int height): x(0), y(0), width(width), height(height), curColor(WHITE), rgbColor(0xFFFFFF), useRGB(false) {}
+TTY::TTY(int width, int height): x(0), y(0), width(width), height(height), curColor(WHITE), rgbColor(0xFFFFFF), useRGB(false), Kobject(KobjectType::TTY) {}
 TTY::~TTY() {}
 auto TTY::plotChar(int x, int y, int c) -> void {}
 auto TTY::rgbSupport() -> bool {return true;}
@@ -10,6 +10,29 @@ auto TTY::setColor(Color c) -> void {
 auto TTY::setColor(unsigned int c) -> void {
     rgbColor = c;
     useRGB=true;
+}
+auto TTY::putChar(int c) -> void {
+    auto scroll = [this]()->void {
+        for(int x=0;x<this->width;x++)
+            for(int y=0;y<this->height;y++)
+               this->plotChar(x,y,0);
+        this->x=this->y=0;
+    };
+    switch(c) {
+        case '\n':
+            x=0;
+            y++;
+            if(y>=height)
+                scroll();
+            break;
+        default:
+            plotChar(x,y,c);
+            x++;
+            if(x>width)
+                y++;
+            if(y>=height)
+                scroll();
+    }
 }
 auto TTY::puts(const char *str) -> void {
     for(int i=0;str[i];i++) {

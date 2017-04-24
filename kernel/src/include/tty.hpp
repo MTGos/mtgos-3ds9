@@ -1,4 +1,5 @@
 #pragma once
+#include <kobject.h>
 enum Color {
     BLACK,
     BLUE,
@@ -17,7 +18,7 @@ enum Color {
     YELLOW,
     WHITE
 };
-class TTY {
+class TTY: public Kobject {
 protected:
     int x;
     int y;
