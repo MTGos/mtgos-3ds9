@@ -1,0 +1,22 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 4
+---
+Language: Cpp
+DerivePointerAlignment: false
+PointerAlignment: Right
+AccessModifierOffset: 0
+AlignAfterOpenBracket: true
+AlignEscapedNewlinesLeft: false
+AlignOperands: true
+AlignTrailingComments: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakTemplateDeclarations: true
+ColumnLimit: 120
+NamespaceIndentation: Inner
+Standard: Cpp11
+UseTab: Never

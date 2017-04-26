@@ -1,5 +1,5 @@
 #pragma once
-#include <tty.hpp>
 #include <kobject.hpp>
+#include <tty.hpp>
 extern TTY *out;
 void setMainTTY(Kobject *obj);
