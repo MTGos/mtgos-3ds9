@@ -92,7 +92,7 @@
 #define MULTIBOOT_INFO_FRAMEBUFFER_INFO 0x00001000
 
 #ifndef ASM_FILE
-
+#define multiboot_PACKED __attribute__((packed))
 typedef unsigned char multiboot_uint8_t;
 typedef unsigned short multiboot_uint16_t;
 typedef unsigned int multiboot_uint32_t;
@@ -230,7 +230,7 @@ struct multiboot_mmap_entry {
 #define MULTIBOOT_MEMORY_NVS 4
 #define MULTIBOOT_MEMORY_BADRAM 5
     multiboot_uint32_t type;
-} GRUB_PACKED;
+} multiboot_PACKED;
 typedef struct multiboot_mmap_entry multiboot_memory_map_t;
 
 struct multiboot_mod_list {
@@ -248,15 +248,15 @@ typedef struct multiboot_mod_list multiboot_module_t;
 
 /* APM BIOS info.  */
 struct multiboot_apm_info {
-    grub_uint16_t version;
-    grub_uint16_t cseg;
-    grub_uint32_t offset;
-    grub_uint16_t cseg_16;
-    grub_uint16_t dseg;
-    grub_uint16_t flags;
-    grub_uint16_t cseg_len;
-    grub_uint16_t cseg_16_len;
-    grub_uint16_t dseg_len;
+    multiboot_uint16_t version;
+    multiboot_uint16_t cseg;
+    multiboot_uint32_t offset;
+    multiboot_uint16_t cseg_16;
+    multiboot_uint16_t dseg;
+    multiboot_uint16_t flags;
+    multiboot_uint16_t cseg_len;
+    multiboot_uint16_t cseg_16_len;
+    multiboot_uint16_t dseg_len;
 };
 
 #endif /* ! ASM_FILE */

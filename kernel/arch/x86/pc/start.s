@@ -7,8 +7,16 @@ _start:
     jmp _start2
 .align MULTIBOOT_HEADER_ALIGN
 .int MULTIBOOT_HEADER_MAGIC
+#ifndef ENABLE_FRAMEBUFFER
 .int 0x0
 .int -(MULTIBOOT_HEADER_MAGIC)
+#else
+.int 0x7
+.int -(MULTIBOOT_HEADER_MAGIC+0x7)
+.int 0,0,0,0,0
+.int 0
+.int 1024, 768, 24
+#endif
 .align MULTIBOOT_HEADER_ALIGN
 .extern start
 _start2:
