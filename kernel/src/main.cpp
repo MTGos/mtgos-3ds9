@@ -1,4 +1,7 @@
 #include <base.hpp>
+/***
+ * Inits all of the system drivers
+ */
 void drivers_init();
 extern "C" void (*start_ctors)();
 extern "C" void (*end_ctors)();

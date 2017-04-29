@@ -1,9 +1,15 @@
 #pragma once
+/**
+ * Contains the various different types of possible Kobjects.
+ */
 enum class kobjectType {
-    POINTER, // Pointer to non-object
-    KOBJECT, // garbage collected kobject
-    TTY,
+    POINTER, ///< Pointer to non-object
+    KOBJECT, ///< garbage collected kobject
+    TTY,     ///< Terminal
 };
+/**
+ * Garbage-collected reference.
+ */
 class Kref {
     public:
     kobjectType type;
@@ -48,6 +54,9 @@ class Kref {
         return *this;
     }
 };
+/**
+ * Garbage collected object.
+ */
 class Kobject {
     public:
     kobjectType type;

@@ -1,5 +1,8 @@
 #pragma once
 #include <kobject.hpp>
+/**
+ * The colors that are supported on TTYs that don't understand RGB colors.
+ */
 enum class Color {
     BLACK,
     BLUE,
@@ -18,25 +21,32 @@ enum class Color {
     YELLOW,
     WHITE
 };
+/**
+ * TTY class. It is used for outputting text on some sort of screen. It supports unicode and at least 16 colors.
+ */
 class TTY : public Kobject {
     protected:
-    int x;
-    int y;
-    int width;
-    int height;
-    Color curColor;
-    unsigned int rgbColor;
-    bool useRGB;
-    virtual auto plotChar(int x, int y, int c) -> void;
+    int x;                                              ///< current X position on the screen
+    int y;                                              ///< current Y on the screen
+    int width;                                          ///< width of the screen
+    int height;                                         ///< height of the screen
+    Color curColor;                                     ///< one of the 16 colors
+    unsigned int rgbColor;                              ///< RGB888 color
+    bool useRGB;                                        ///< true if the rgbColor is used instead of the curColor.
+    virtual auto plotChar(int x, int y, int c) -> void; ///< plots a single character on the screen.
 
     public:
     TTY(int width, int height);
     virtual ~TTY();
-    virtual auto rgbSupport() -> bool;
-    virtual auto setColor(Color c) -> void;
-    virtual auto setColor(unsigned int c) -> void;
-    virtual auto putChar(int c) -> void;
-    virtual auto puts(const char *s) -> void;
+    virtual auto rgbSupport()
+        -> bool; ///< returns true if RGB colors can be used. Note that some colors might be same on some TTYs.
+    virtual auto setColor(Color c) -> void;        ///< sets the color to one of the 16 required
+    virtual auto setColor(unsigned int c) -> void; ///< sets the color to a RGB888 color.
+    virtual auto putChar(int c) -> void;           ///< prints a unicode codepoint on the TTY
+    virtual auto puts(const char *s) -> void;      ///< prints a UTF-8 string
+    /**
+     * Outputs an integer of base16 on the screen. Works with any type that you can shift and dereference arrays with.
+     */
     template <typename T>
     auto puti(T x) -> TTY & {
         T output = x;
@@ -51,6 +61,9 @@ class TTY : public Kobject {
         puts(ptr + 1);
         return *this;
     }
+    /**
+     * Outputs a arbitrary type, as long as it can be casted to const char* or has a template overload.
+     */
     template <typename T>
     auto operator<<(T x) -> TTY & {
         puts(x);

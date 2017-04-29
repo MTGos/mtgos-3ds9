@@ -11,3 +11,5 @@ __pycache__/
 *.iso
 iso/kernel
 *.firm
+html/
+latex/
