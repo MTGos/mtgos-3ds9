@@ -7,6 +7,7 @@ extern "C" void (*end_dtors)();
 void main() {
     for (auto ctor = &start_ctors; ctor < &end_ctors; ctor++) (**ctor)();
     drivers_init();
-    *out << "Hallo!\n";
+    *out << "Hello!\n";
+    *out << "テスト\n";
     for (auto dtor = &start_dtors; dtor != &end_dtors; dtor++) (**dtor)();
 }

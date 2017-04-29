@@ -7,8 +7,8 @@ auto Framebuffer::plotChar(int x, int y, int c) -> void {
     if (width == 16) this->x++;
     if (!width) return;
     int color;
-    for (int px = x * 8; px < (x * 8) + width; x++)
-        for (int py = y * 16; py < (y * 16) + 16; y++) {
+    for (int px = x * 8; px < (x * 8) + width; px++)
+        for (int py = y * 16; py < (y * 16) + 16; py++) {
             color = rgbColor;
             if (!useRGB) {
                 switch (curColor) {
@@ -32,7 +32,19 @@ auto Framebuffer::plotChar(int x, int y, int c) -> void {
                 rgbColor = color;
                 useRGB = true;
             }
-            plotPixel(px, py, color);
+            unsigned char *chara = (unsigned char *)font_ptr[c];
+            int bx = px - (x * 8);
+            int by = py - (y * 16);
+            if (width == 16) {
+                by *= 2;
+                if (bx > 7) {
+                    by++;
+                    bx -= 8;
+                }
+                plotPixel(px, py, (chara[by] & (1 << (7 - bx))) ? color : 0);
+            } else {
+                plotPixel(px, py, (chara[by] & (1 << (7 - bx))) ? color : 0);
+            }
         }
 }
 Framebuffer::Framebuffer(int height, int width) : TTY(height, width) {}
