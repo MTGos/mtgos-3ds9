@@ -16,6 +16,7 @@ def get_elf_seg(f): #Return entry,section_beg,section_size,section
         raise Exception("Little Endian ELF required!")
     if f.read(1) != b"\x01":
         raise Exception("Unknown ELF version!")
+    f.read(9)
     if struct.unpack("<H",f.read(2))[0] != 2:
         raise Exception("Invalid ELF format")
     if struct.unpack("<H",f.read(2))[0] != 0x28:
@@ -31,7 +32,8 @@ def get_elf_seg(f): #Return entry,section_beg,section_size,section
     section_size = 0
     section = b''
     for ent in range(no_ent):
-        if struct.unpack("<I",f.read(4)) != 1:
+        f.seek(phoff+ent*0x20)
+        if struct.unpack("<I",f.read(4))[0] != 1:
             continue
         off,vaddr,filesz,memsz=struct.unpack("<IIxxxxII",f.read(20))
         section_begin = vaddr
@@ -44,7 +46,7 @@ def get_elf_seg(f): #Return entry,section_beg,section_size,section
     return (loadAddr,section_begin,section_size,section)
 f1 = open(sys.argv[1],"rb")
 f2 = open(sys.argv[2],"rb")
-f3 = open(sys.argv[3],"wb")
+f = open(sys.argv[3],"wb")
 arm9_entry,arm9_section_beg,arm9_section_size,arm9_section = get_elf_seg(f1)
 arm11_entry,arm11_section_beg,arm11_section_size,arm11_section = get_elf_seg(f2)
 arm9_hash=hashlib.sha256(arm9_section).digest()
