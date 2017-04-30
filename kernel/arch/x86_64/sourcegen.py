@@ -24,7 +24,8 @@ if config["ENABLE_FPU"] and not config["ENABLE_SSE"]:
 if config["ENABLE_SSE"]:
     data_section+=".align 16\nfxsave_reg:\n    .space 512"
     all_regs_push.append("fxsave fxsave_reg")
-    all_regs_pop.append("fxrstor fxsave_reg")
+    all_regs_pop.append("fxrstor (%rax)")
+    all_regs_pop.append("pop %rax")
     all_regs_push.append("pushq $fxsave_reg")
 
 print("Writing interrupt handler")
@@ -33,7 +34,7 @@ for ins in all_regs_push:
 int_handler.write("    mov %rsp, %rdi\n    call handleINT\n    mov %rax, %rsp\n")
 for ins in reversed(all_regs_pop):
     int_handler.write("    "+ins+"\n")
-int_handler.write("    add $8, %esp\n    iret\n")
+int_handler.write("    add $16, %rsp\n    iretq\n")
 
 print("Writing panic handler")
 int_handler.write(".global panic\n.extern panic2\npanic:\n")

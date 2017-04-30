@@ -1,4 +1,5 @@
 #include "../../../hw/3ds9/picafb/picafb.hpp"
+#include "../../../hw/3ds9/vectorinit/vectorinit.hpp"
 #include <base.hpp>
 #include <config.h>
 
