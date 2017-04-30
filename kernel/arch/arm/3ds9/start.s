@@ -6,7 +6,7 @@ _start:
     mrs r0, cpsr
     orr r0, r0, #0x80
     msr cpsr_c, r0 //Disable IRQs
-    //Flush instruction cache
+/*    //Flush instruction cache
     mov r0, #0
     mcr p15, 0, r0, c7, c5, 0
 
@@ -26,9 +26,9 @@ _start:
     mcr p15, 0, r0, c7, c5, 0
     ldr r0, =0xFFFF0830
     blx r0
-
+*/
     ldr sp, =kernel_stack //set stack
-
+/*
     //Configure ITCM to…something
     mrc p15, 0, r0, c9, c1, 1
     bic r0, #0b111110
@@ -85,7 +85,7 @@ _start:
     orr r0, r0, #(1<<2)
     orr r0, r0, #(1<<0)
     mcr p15, 0, r0, c1, c0, 0
-
+*/
     //Start start
     blx start
 
