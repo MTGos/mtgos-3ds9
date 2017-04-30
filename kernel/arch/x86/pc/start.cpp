@@ -5,6 +5,8 @@
 #else
 #include "../../../hw/pc/vesafb/vesafb.hpp"
 #endif
+#include "../../../hw/pc/8259/pic.hpp"
+#include "../../../hw/pc/idt/idt.hpp"
 #include <base.hpp>
 static multiboot_info_t *mb_info;
 #ifndef ENABLE_FRAMEBUFFER
@@ -20,4 +22,8 @@ extern "C" void start(int eax, multiboot_info_t *ebx) {
 void drivers_init() {
     setMainTTY(&term);
     --term;
+    initIDT();
+    PIC::initPIC(0x20, 0x28);
+    asm volatile("sti");
+    asm volatile("int $0");
 }

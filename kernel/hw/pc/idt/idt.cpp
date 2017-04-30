@@ -27,9 +27,9 @@ void initIDT() {
     for (int i = 0; i < 256; i++) setIDTEntry(i, start_vectors + 16 * i);
     struct {
         uint16_t size;
-        uint32_t off;
+        IDT_entry *off;
     } __attribute__((packed)) idtr;
     idtr.size = sizeof(entries);
-    idtr.off = (uint32_t)((uintptr_t)entries);
+    idtr.off = (IDT_entry *)(&entries);
     asm volatile("lidt %0" : : "m"(idtr));
 }

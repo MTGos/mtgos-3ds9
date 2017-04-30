@@ -24,7 +24,8 @@ if config["ENABLE_FPU"] and not config["ENABLE_SSE"]:
 if config["ENABLE_SSE"]:
     data_section+=".align 16\nfxsave_reg:\n    .space 512"
     all_regs_push.append("fxsave fxsave_reg")
-    all_regs_pop.append("fxrstor fxsave_reg")
+    all_regs_pop.append("fxrstor (%eax)")
+    all_regs_pop.append("pop %eax")
     all_regs_push.append("pushl $fxsave_reg")
 
 print("Writing interrupt handler")

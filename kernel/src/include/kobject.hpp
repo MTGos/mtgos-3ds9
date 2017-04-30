@@ -77,6 +77,7 @@ class Kobject {
         refctr--;
         if (refctr == 0) {
             // TODO delete this;
+            this->~Kobject();
             return *((Kobject *)nullptr);
         }
         return *this;
