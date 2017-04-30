@@ -28,7 +28,10 @@ auto TTY::putChar(int c) -> void {
     default:
         plotChar(x, y, c);
         x++;
-        if (x > width) y++;
+        if (x > width) {
+            y++;
+            x = 0;
+        }
         if (y >= height) scroll();
     }
 }
