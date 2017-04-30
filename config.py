@@ -89,3 +89,15 @@ if "ENABLE_FRAMEBUFFER_UNICODE" in config:
             p.stdin.write(l.encode("UTF-8"))
     p.stdin.close()
     p.wait()
+
+print("Generating sourcecode…")
+int_handler = open("kernel/arch/"+config["ARCH"]+"/int.s","w")
+import os
+try:
+    os.makedirs("kernel/arch/"+config["ARCH"]+"/include")
+except:
+    pass
+reg_struct = open("kernel/arch/"+config["ARCH"]+"/include/regs.h","w")
+exec(open("kernel/arch/"+config["ARCH"]+"/sourcegen.py").read())
+int_handler.close()
+reg_struct.close()

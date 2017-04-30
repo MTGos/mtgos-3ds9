@@ -6,3 +6,5 @@ if config["ENABLE_FRAMEBUFFER"]:
     add_driver(False, "vesafb")
 else:
     add_driver(False, "cgaterm")
+add_driver(False, "8259")
+add_driver(False, "idt")

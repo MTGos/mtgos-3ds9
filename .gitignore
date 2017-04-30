@@ -13,3 +13,5 @@ iso/kernel
 *.firm
 html/
 latex/
+int.s
+regs.h

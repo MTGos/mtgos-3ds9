@@ -20,7 +20,8 @@ PICAfb::PICAfb() : Framebuffer(25, 30) {
     *((uint32_t *)0x10202A40) = 0x3F; // Bottom screen brightness
     *((uint32_t *)0x10202244) = 0x1023E;
     *((uint32_t *)0x10202A44) = 0x1023E;
-
+    // TODO this code is ugly and copied right out of the arm9loaderhax git
+    // find out what 90% of this does
     // Top screen
     *(volatile uint32_t *)0x10400400 = 0x000001c2;
     *(volatile uint32_t *)0x10400404 = 0x000000d1;
