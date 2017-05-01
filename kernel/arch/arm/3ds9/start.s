@@ -86,6 +86,11 @@ _start:
     orr r0, r0, #(1<<0)
     mcr p15, 0, r0, c1, c0, 0
 */
+    //Certain bootloaders put the interrupt vectors in ITCM.
+    //We don't want to mess with ITCM, so we put it back
+    mrc p15, 0, r0, c1, c0, 0
+    orr r0, #(1<<13)
+    mcr p15, 0, r0, c1, c0, 0
     //Start start
     blx start
 

@@ -9,7 +9,7 @@ void svc_call();
 void undefined_op();
 }
 void initVectors() {
-    uintptr_t *vectors = (uintptr_t *)0x08000000;
+    uintptr_t *vectors = (uintptr_t *)0x0800000;
     // branch_macro is a ldr pc, [pc,#-4], meaning it reads the following word as PC
     vectors[0] = branch_macro;
     vectors[1] = (uintptr_t)&normal_irq;
