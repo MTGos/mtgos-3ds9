@@ -25,32 +25,22 @@ struct FIRM_sect {
 struct FIRM_header {
     char magic[4]; //! Magic "FIRM" string (not-null terminated)
     int version; //! Version. Currently 1
-    void(*entrypoint)(void**); //! Address where the processor jumps to after loading
-    void (*arm11entry)(void**);
+    void(*entrypoint)(); //! Address where the processor jumps to after loading
+    void (*arm11entry)();
     unsigned int reserved[0xC];
     struct FIRM_sect sections[4]; //! The four internal sections
     unsigned char RSA2048[0x100]; //! Currently unused
 }__attribute__((packed));
-/**
- * \brief Module table for the kernel (Up to 1024 mods)
- */
-void *arm9modtable[64];
-void *arm11modtable[64];
 struct FIRM_header hdr;
 void doARM11() {
     DIAGPXL(0);
-    hdr.arm11entry(arm11modtable);
+    hdr.arm11entry();
     for(;;);
 }
 void init() {
     FATFS fs;
     FIL firm;
     f_mount(&fs, "0:", 0);
-    unsigned int off=0x20000000;
-    arm9modtable[0]=0x20000000;
-    arm9modtable[1]=0;
-    arm11modtable[0]=0x20000000;
-    arm11modtable[1]=0;
     if(f_open(&firm, "mtgos.firm", FA_READ | FA_OPEN_EXISTING) == FR_OK) {
         DIAGPXL(1);
         unsigned int br;
@@ -71,21 +61,9 @@ void init() {
             DIAGPXL(i+8);
         }
         DIAGPXL(12);
-        FIL dsp_txt9;
-        f_open(&dsp_txt9, "dsp_txt.neun", FA_READ | FA_OPEN_EXISTING);
-        f_read(&dsp_txt9, (void*)off, f_size(&dsp_txt9), &br);
-        off+=f_size(&dsp_txt9);
-	off&=~0xfff;
-	off+=0x1000;
-        FIL dsp_txt11;
-        arm11modtable[0]=off;
-        arm11modtable[1]=0;
-        f_open(&dsp_txt11, "dsp_txt.elf", FA_READ | FA_OPEN_EXISTING);
-        f_read(&dsp_txt11, (void*)off, f_size(&dsp_txt11), &br);
-        off+=f_size(&dsp_txt11);
         void(**a11fpointer)(void)=(void(**)(void**))0x1FFFFFF8;
         *a11fpointer=&doARM11;
-        hdr.entrypoint(arm9modtable); //Jump to kernel
+        hdr.entrypoint(); //Jump to kernel
     }
     for(;;);
 }
