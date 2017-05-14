@@ -15,3 +15,4 @@ html/
 latex/
 int.s
 regs.h
+out/
