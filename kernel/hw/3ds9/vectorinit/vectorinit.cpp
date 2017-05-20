@@ -7,9 +7,12 @@ void normal_irq();
 void prefetch_abort();
 void svc_call();
 void undefined_op();
+void flushAll();
 }
+#pragma GCC push_options
+#pragma GCC optimize("O0")
 void initVectors() {
-    uintptr_t *vectors = (uintptr_t *)0x0800000;
+    uintptr_t *vectors = (uintptr_t *)0x08000000;
     // branch_macro is a ldr pc, [pc,#-4], meaning it reads the following word as PC
     vectors[0] = branch_macro;
     vectors[1] = (uintptr_t)&normal_irq;
@@ -23,4 +26,6 @@ void initVectors() {
     vectors[9] = (uintptr_t)&prefetch_abort;
     vectors[10] = branch_macro;
     vectors[11] = (uintptr_t)&data_abort;
+    flushAll();
 }
+#pragma GCC pop_options

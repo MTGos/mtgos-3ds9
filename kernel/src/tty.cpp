@@ -16,7 +16,7 @@ auto TTY::setColor(unsigned int c) -> void {
 auto TTY::putChar(int c) -> void {
     auto scroll = [this]() -> void {
         for (int x = 0; x < this->width; x++)
-            for (int y = 0; y < this->height; y++) this->plotChar(x, y, 0);
+            for (int y = 0; y < this->height; y++) this->plotChar(x, y, 0x20);
         this->x = this->y = 0;
     };
     switch (c) {
@@ -28,7 +28,7 @@ auto TTY::putChar(int c) -> void {
     default:
         plotChar(x, y, c);
         x++;
-        if (x > width) {
+        if (x >= width) {
             y++;
             x = 0;
         }

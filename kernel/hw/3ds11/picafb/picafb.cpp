@@ -8,7 +8,7 @@
 #define GL_RGB565_OES 2
 #define GL_RGB5_A1_OES 3
 #define GL_RGBA4_OES 4
-PICAfb::PICAfb() : Framebuffer(25, 30) {
+PICAfb::PICAfb() : Framebuffer(50, 15) {
 #ifdef ENABLE_SCREENINIT
     MCU::enableTopLCD();
     MCU::enableBottomLCD();
@@ -93,8 +93,8 @@ PICAfb::PICAfb() : Framebuffer(25, 30) {
 PICAfb::~PICAfb() {}
 auto PICAfb::plotPixel(int x, int y, int col) -> void {
     unsigned char *lfb = (unsigned char *)0x18300000;
-    // XXX I know it's rotated. But I need more vertical space than horizonal space.
-    int off = (y * 240 + x) * 3;
+    y=240-y-1;
+    int off = (x * 240 + y) * 3;
     for (int i = 0; i < 3; i++) {
         lfb[off++] = col;
         col >>= 8;

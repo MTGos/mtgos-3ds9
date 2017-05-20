@@ -5,13 +5,14 @@ int_handler.write(
 .section .bss
 .space 4096
 exception_stack:
+.section .data
+.space 4
+oldsp:
 .section .text
 .global branch_macro
 branch_macro:
     ldr pc, [pc, #-4] //Load the next word into PC
 .macro interrupt_handler intid
-    //Set to the correct stack
-    ldr sp, =exception_stack
     push {r0-r12,lr} //Push registers
 
     //Get previous sp and lr
@@ -41,7 +42,8 @@ branch_macro:
     ldr r0, =\intid
 
     //Jump to generic handler
-    blx intr_common_handler
+
+    bl intr_common_handler
 
     //pop the special registers
     pop {r0, r3, r4, lr}
@@ -50,6 +52,7 @@ branch_macro:
     orr lr, lr, #1 //Enable thumb mode on return#
 2:
     str lr, [sp, #0x34] //Set correct lr
+
     ldmfd sp!, {r0-r12, pc}^ //Return back to original mode
 .endm
 .global data_abort
@@ -81,8 +84,8 @@ if ("ENABLE_HARD" in config) and config["ENABLE_HARD"]:
     for i,j in enumerate(["fpsid","fpscr","fpexc"]):
         push_regs.append("fmrx r"+str(i+1)+", "+j)
         pop_regs.append("fmxr "+j+", r"+str(i+1))
-    push_regs.append("push {r1,r2,r3,r4,r5}")
-    pop_regs.append("pop {r1,r2,r3,r4,r5}")
+    push_regs.append("push {r1,r2,r3}")
+    pop_regs.append("pop {r1,r2,r3}")
     push_regs.append("vpush {d0-d15}")
     pop_regs.append("vpop {d0-d15}")
 push_regs.append("mov r1, sp")
@@ -102,10 +105,10 @@ int_handler.write("    b panic\n")
 
 reg_struct.write("#include <stdint.h>\nstruct cpu_state {\n")
 if ("ENABLE_HARD" in config) and config["ENABLE_HARD"]:
-    for reg in ["fpsid","fpscr","fpexc"]:
-        reg_struct.write("    uint32_t "+reg+";\n")
     for reg in ("d"+str(i) for i in range(16)):
         reg_struct.write("    double "+reg+";\n")
+    for reg in ["fpsid","fpscr","fpexc"]:
+        reg_struct.write("    uint32_t "+reg+";\n")
 for reg in ["cpsr","sp","lr","returnAddr"]:
     reg_struct.write("    uint32_t "+reg+";\n")
 for i in range(13):

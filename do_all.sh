@@ -1,5 +1,5 @@
 builddir() {
-    rm -rvvf build/ &&
+    rm -rf build/ &&
     mkdir -pv build/
 }
 rm -rvvf out/
@@ -59,4 +59,15 @@ mv kernel9 build/kernel &&
 buildtools/sighax-firm.sh &&
 mv sighax.firm out/ &&
 cp -v build/kernel/kernel out/arm11loaderhax.elf
-rm -rvvf build/
+rm -rf build/
+
+#firmloader
+pushd boot/3ds &&
+builddir &&
+pushd build &&
+cmake -DCMAKE_TOOLCHAIN_FILE=../../../toolchains/arm-none-eabi.cmake ..  &&
+make -j$(nproc) &&
+popd &&
+mv build/arm9loaderhax.bin ../../out &&
+rm -rf build/ &&
+popd

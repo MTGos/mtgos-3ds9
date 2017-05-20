@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import sys
+import base64
 if len(sys.argv) < 4:
     print("USAGE: mkfirm.py <kernel9.elf> <kernel11.elf> <output.firm>")
-print("WARNING: Currently you cannot install this FIRM, because YOU'LL BRICK YOUR 3DS!")
-sighax_sig = b'\x00'*256 #TODO insert sighax signature here.
+sighax_sig=base64.a85decode(b'DZ:iLO%T*f"sal5!m5:QU$Gmm[dg)m,&2*<U<LK%FP[g"\'Kc#M==?kH6r/uA>-HJLBEU+9e;EeCligEb]Qpn^2!Gp5_g%-,]IDC-MMahK=@9T\\,0,4&6MDgNaP\'t06CY.qpSb;KMn)+PR1>e0IbaRdgDC5J-m3DLB2d$%DNZn-W7=ADNLl+s&Z2gs%A?=ZJ:91F?66n9DXZ.-lL+5$#ebaKH5IB)Y&DTGd%!,O4me2`$F["\\.$Tr)%\\,h,n.Q]LTQGQRH:#a?1l(T-i_m7b\\7Mg5Ga7LDUacTc`!af0V`"\'-*]I]3%SL)@)ll701ok)i')
 import struct
 import hashlib
 def get_elf_seg(f): #Return entry,section_beg,section_size,section
@@ -49,6 +49,18 @@ f2 = open(sys.argv[2],"rb")
 f = open(sys.argv[3],"wb")
 arm9_entry,arm9_section_beg,arm9_section_size,arm9_section = get_elf_seg(f1)
 arm11_entry,arm11_section_beg,arm11_section_size,arm11_section = get_elf_seg(f2)
+def align(a,b):
+    if a % b:
+        return a + b - (a%b)
+    return a
+def align2(a,b):
+    if len(a) % b:
+        return a + bytes(512-(len(a)%b))
+    return a
+arm9_section_size=align(arm9_section_size,512)
+arm11_section_size=align(arm11_section_size,512)
+arm9_section=align2(arm9_section,512)
+arm11_section=align2(arm11_section,512)
 arm9_hash=hashlib.sha256(arm9_section).digest()
 arm11_hash=hashlib.sha256(arm11_section).digest()
 arm9_off = 0x200

@@ -15,6 +15,10 @@ void print_regdump(cpu_state *state) {
     (*out << " r11: ").puti(state->r11);
     (*out << " r12: ").puti(state->r12);
     (*out << " pc: ").puti(state->pc);
+    (*out << " cpsr: ").puti(state->cpsr);
+    (*out << " sp: ").puti(state->sp);
+    (*out << " lr: ").puti(state->lr);
+    (*out << " returnAddr: ").puti(state->returnAddr);
     *out << "\n";
 }
 extern "C" cpu_state *handleINT(int number, cpu_state *state) {
@@ -25,7 +29,8 @@ extern "C" cpu_state *handleINT(int number, cpu_state *state) {
         out->setColor(Color::RED);
         print_regdump(state);
         *out << "KERNEL PANIC: Unhandled CPU exception\n";
-        //        for(;;);
+        for (;;);
+    } else {
     }
     switch (number) {
     case 0:
