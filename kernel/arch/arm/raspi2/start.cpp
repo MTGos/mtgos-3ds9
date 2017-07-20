@@ -2,6 +2,7 @@
 #include "../../../hw/raspi2/vector/vector.hpp"
 #include <base.hpp>
 #include <config.h>
+#include "../../../mmaps/raspi2.mh"
 
 Serial term;
 void main();

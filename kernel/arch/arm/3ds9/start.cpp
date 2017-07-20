@@ -2,6 +2,7 @@
 #include "../../../hw/3ds9/vectorinit/vectorinit.hpp"
 #include <base.hpp>
 #include <config.h>
+#include "../../../mmaps/3ds9.mh"
 
 PICAfb term;
 void main();

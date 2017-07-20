@@ -11,22 +11,16 @@ auto PMM::isFree(phys_t addr) -> bool {
         return false;
     return true;
 }
-PMM::PMM(phys_t page_size, mmap_ent *entries, int length): page_size(page_size), head(nullptr) {
-    for(int i=0;i< length; i++) {
-        for(phys_t j=entries[i].start;j<entries[i].end;j+=page_size) {
-            if(isFree(j))
-                *this << j;
-        }
-    }
+PMM::PMM(phys_t page_size): page_size(page_size), head(nullptr) {
 }
 PMM::~PMM() {}
 
 auto PMM::operator<<(phys_t page) -> PMM & {
-    *this(page,1);
+    (*this)(page,1);
     return *this;
 }
 auto PMM::operator>>(phys_t &page) -> PMM & {
-    page = *this, 1;
+    page = (*this, 1);
     return *this;
 }
 
@@ -62,7 +56,7 @@ auto PMM::operator,(size_t no_pages) -> phys_t {
     }
     panic("Not enough continuous free memory is available.");
 }
-auto PMM::operator(phys_t pages, size_t no_pages) -> void {
+auto PMM::operator()(phys_t pages, size_t no_pages) -> void {
     for(size_t i=0; i<no_pages; i++, pages+=page_size) {
         PMM_ent *curr=(PMM_ent *)pages;
         curr->next=head;
@@ -70,10 +64,10 @@ auto PMM::operator(phys_t pages, size_t no_pages) -> void {
         head=curr;
     }
 }
-virtual auto operator&&(phys_t page) -> bool {
+auto PMM::operator&&(phys_t page) -> bool {
    PMM_ent *curr = head;
    while(curr) {
-       if(curr->value==page)
+       if(curr->val==page)
            return true;
        curr=curr->next;
    }
@@ -81,7 +75,4 @@ virtual auto operator&&(phys_t page) -> bool {
 }
 auto operator&&(phys_t a, PMM mm) -> bool {
     return mm && a;
-}
-auto operator&&(phys_t a, PMM *mm) -> bool {
-    return a in *mm;
 }

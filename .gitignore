@@ -16,3 +16,5 @@ latex/
 int.s
 regs.h
 out/
+*.mmap
+*.mh
