@@ -1,5 +1,6 @@
 #include <base.hpp>
 TTY *out;
+PMM *pmm;
 bool tty_set = false;
 void setMainTTY(TTY *obj) {
     ++*obj;

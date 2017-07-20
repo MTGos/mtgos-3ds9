@@ -1,7 +1,9 @@
 #pragma once
 #include <kobject.hpp>
 #include <tty.hpp>
+#include <pmm.hpp>
 extern TTY *out; ///< main TTY for output
+extern PMM *pmm;
 /***
  * Sets the main TTY to some other TTY object.
  */

@@ -79,7 +79,7 @@ PMM_MMAP::PMM_MMAP(): PMM(0x1000) {
     uint8_t *off=(uint8_t*)(&header+1);
     for(uint32_t i=0;i<header.length;i++) {
         MMAPTag &tag = *((MMAPTag*)off);
-        off+=tag.size;
+        off+=tag.size+2;
         switch(tag.id) {
             case 0:
             case 1:
@@ -122,7 +122,7 @@ auto PMM_MMAP::isFree(phys_t addr) -> bool {
     uint8_t *off=(uint8_t*)(&header+1);
     for(uint32_t i=0;i<header.length;i++) {
         MMAPTag &tag = *((MMAPTag*)off);
-        off+=tag.size;
+        off+=tag.size+2;
         if(tag.id != 5)
             continue;
         if((tag.REGION.start > addr) || (tag.REGION.end < addr))

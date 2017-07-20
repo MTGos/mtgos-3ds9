@@ -12,6 +12,23 @@ auto PMM::isFree(phys_t addr) -> bool {
     return true;
 }
 PMM::PMM(phys_t page_size): page_size(page_size), head(nullptr) {
+#ifndef __x86_64__
+    for(phys_t i=page_size; i; i+=page_size) {
+        if(isFree(i))
+            *this << i;
+    }
+#else
+    //Find out highest GB
+    phys_t top=0;
+    for(phys_t i=page_size; i<1024*1024*1024*1024; i+=1024*1024*1024) {
+        if(isFree(i))
+            top=i;
+    }
+    for(phys_t i=page_size; i < top; i+=page_size) {
+        if(isFree(i))
+            *this << i;
+    }
+#endif
 }
 PMM::~PMM() {}
 

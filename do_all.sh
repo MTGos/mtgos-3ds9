@@ -16,7 +16,8 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/i686-elf.cmake .. &&
 make -j$(nproc) &&
 popd &&
 buildtools/grub-iso.sh &&
-mv bootable.iso out/x86-pc.iso
+mv bootable.iso out/x86-pc.iso &&
+cp build/kernel/kernel out/x86-pc.elf
 
 #x86-PC config
 {
@@ -29,7 +30,8 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-elf.cmake .. &&
 make -j$(nproc) &&
 popd &&
 buildtools/grub-iso.sh &&
-mv bootable.iso out/x86_64-pc.iso
+mv bootable.iso out/x86_64-pc.iso &&
+cp build/kernel/kernel out/x86_64-pc.elf
 
 #arm-3ds9 config
 {
