@@ -83,7 +83,6 @@ PMM_MMAP::PMM_MMAP(): PMM(0x1000) {
         switch(tag.id) {
             case 0:
             case 1:
-            case 5:
                 break; //Ignored for now
             case 2: //CPUARCH
                 if(tag.CPUARCH.value !=
@@ -111,10 +110,19 @@ PMM_MMAP::PMM_MMAP(): PMM(0x1000) {
             case 4:
                 bits = tag.BITS.value;
                 break;
+            case 5:
+                if(tag.REGION.permission != PERM::RWX)
+                    break;
+                if(tag.REGION.start < lowest_page)
+                    lowest_page = tag.REGION.start;
+                if(tag.REGION.end > highest_page)
+                    highest_page = tag.REGION.end;
+                break;
             default:
                 for(;;);
         }
     }
+    fill();
 }
 PMM_MMAP::~PMM_MMAP() {}
 auto PMM_MMAP::isFree(phys_t addr) -> bool {
@@ -125,7 +133,7 @@ auto PMM_MMAP::isFree(phys_t addr) -> bool {
         off+=tag.size+2;
         if(tag.id != 5)
             continue;
-        if((tag.REGION.start > addr) || (tag.REGION.end < addr))
+        if((tag.REGION.start > addr) || (tag.REGION.end <= addr))
             continue;
         if(tag.REGION.permission == PERM::RWX)
             return PMM::isFree(addr);

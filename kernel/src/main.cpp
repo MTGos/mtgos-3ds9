@@ -12,5 +12,9 @@ void main() {
     drivers_init();
     *out << "Hello!\n";
     *out << "テスト\n";
+    while(true) {
+        out->puti((*pmm, 1));
+        *out << "\n";
+    }
     for (auto dtor = &start_dtors; dtor != &end_dtors; dtor++) (**dtor)();
 }

@@ -7,28 +7,16 @@ auto PMM::isFree(phys_t addr) -> bool {
         return false;
     phys_t start = (phys_t)(&kernel_start);
     phys_t end = (phys_t)(&kernel_end);
-    if((addr >= start) or (addr < end))
+    if((addr >= start) && (addr < end))
         return false;
     return true;
 }
-PMM::PMM(phys_t page_size): page_size(page_size), head(nullptr) {
-#ifndef __x86_64__
-    for(phys_t i=page_size; i; i+=page_size) {
+PMM::PMM(phys_t page_size): page_size(page_size), head(nullptr) {}
+void PMM::fill() {
+    for(phys_t i=lowest_page; i<highest_page+1; i+=page_size) {
         if(isFree(i))
             *this << i;
     }
-#else
-    //Find out highest GB
-    phys_t top=0;
-    for(phys_t i=page_size; i<1024*1024*1024*1024; i+=1024*1024*1024) {
-        if(isFree(i))
-            top=i;
-    }
-    for(phys_t i=page_size; i < top; i+=page_size) {
-        if(isFree(i))
-            *this << i;
-    }
-#endif
 }
 PMM::~PMM() {}
 

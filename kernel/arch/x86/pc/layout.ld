@@ -30,6 +30,7 @@ SECTIONS {
     }
     .bss : {
         *(.bss)
+        *(.bss.*)
         *(COMMON)
     }
     kernel_end = .;

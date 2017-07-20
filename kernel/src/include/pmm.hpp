@@ -16,7 +16,10 @@ class PMM {
     protected:
         PMM_ent *head; ///< Head of the linked list
         virtual auto isFree(phys_t addr) -> bool; ///< Returns true if the provided page is free to use
+        auto fill() -> void;
         phys_t page_size; ///< Contains the size of a single memory page, in bytes
+        phys_t lowest_page;
+        phys_t highest_page;
     public:
         PMM(phys_t page_size);
         virtual ~PMM();
