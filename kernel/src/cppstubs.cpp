@@ -17,3 +17,10 @@ void *operator new(size_t s, void *p) { return p; }
 void *operator new[](size_t s, void *p) { return p; }
 void operator delete(void *, void *p) {}
 void operator delete[](void *, void *p) {}
+__extension__ typedef int __guard __attribute__((mode(__DI__)));
+extern "C" int __cxa_guard_acquire(__guard *g) {
+    return !*(char*)g;
+}
+extern "C" int __cxa_guard_release(__guard *g) {
+    *(char *)g = 1;
+}

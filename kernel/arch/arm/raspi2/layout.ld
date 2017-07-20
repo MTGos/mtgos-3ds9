@@ -1,6 +1,6 @@
 ENTRY(_start)
 SECTIONS {
-   . = 0x20401000; /*If luma wouldn't put the entire firm at 0x20001000, I'd have used 0x20000000 */
+   . = 0x8000; /*If luma wouldn't put the entire firm at 0x20001000, I'd have used 0x20000000 */
     kernel_start = .;
     .text : {
         KEEP(*(.text.boot));

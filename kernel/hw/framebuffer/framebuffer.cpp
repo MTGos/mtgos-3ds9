@@ -1,5 +1,6 @@
 #include "framebuffer.hpp"
 #include <genfont.h>
+#include <base.hpp>
 auto Framebuffer::plotPixel(int x, int y, int col) -> void {}
 auto Framebuffer::plotChar(int x, int y, int c) -> void {
     if (c > 65535) return;

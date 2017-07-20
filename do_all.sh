@@ -1,3 +1,4 @@
+unset CFLAGS CXXFLAGS LDFLAGS
 builddir() {
     rm -rf build/ &&
     mkdir -pv build/
@@ -59,4 +60,15 @@ mv kernel9 build/kernel &&
 buildtools/sighax-firm.sh &&
 mv sighax.firm out/ &&
 cp -v build/kernel/kernel out/arm11loaderhax.elf
-rm -rf build/
+
+{
+    echo 2
+    echo 2
+    yes ''
+} | ./config.py &&
+builddir &&
+pushd build &&
+cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/arm-none-eabi.cmake .. &&
+make -j$(nproc) &&
+popd &&
+cp -v build/kernel/kernel out/raspi2.elf

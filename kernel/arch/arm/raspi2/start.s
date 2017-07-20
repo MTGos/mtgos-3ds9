@@ -8,6 +8,7 @@
 _start:
     CPSID aif //Disable interrupts
     ldr sp,  =svc_stack
+    push {r0,r1,r2}
     //set other stacks
     mrs r0, cpsr
     bic r2, r0, #0x1F
@@ -31,15 +32,13 @@ _start:
     msr cpsr, r1
     ldr sp, =kernel_stack
     //Enable FPU
-    mov r0, #0
-    mov r1, #0xF00000
-    mcr p15, 0, r1, c1, c0, 2
-    mcr p15, 0, r0, c7, c5, 4
-    mov r1, #0x40000000
-    mov r2, #0x3C00000
-    fmxr fpexc, r1
-    fmxr fpscr, r2
-
+    MRC p15, 0, r0, c1, c1, 2
+    ORR r0, r0, #3<<10 // enable fpu
+    MCR p15, 0, r0, c1, c1, 2
+    LDR r0, =(0xF << 20)
+    MCR p15, 0, r0, c1, c0, 2
+    MOV r3, #0x40000000 
+    VMSR FPEXC, r3
     //Start MTGos
     blx start
 

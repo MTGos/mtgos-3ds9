@@ -47,6 +47,7 @@ branch_macro:
 
     //pop the special registers
     pop {r0, r3, r4, lr}
+    msr spsr, r0
     tst r0, #0x20 //Is code ARM or thumb?
     beq 2f
     orr lr, lr, #1 //Enable thumb mode on return#
@@ -93,7 +94,9 @@ pop_regs.append("mov sp, r0")
 
 for opc in push_regs:
     int_handler.write("    "+opc+"\n")
+int_handler.write("    push {lr}\n")
 int_handler.write("    blx handleINT\n")
+int_handler.write("    pop {lr}\n")
 for opc in reversed(pop_regs):
     int_handler.write("    "+opc+"\n")
 int_handler.write("    bx lr\n")

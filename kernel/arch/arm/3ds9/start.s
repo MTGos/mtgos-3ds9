@@ -50,7 +50,7 @@ _start:
     mov r1, r2
     orr r1, #0b10011 //SVC
     msr cpsr, r1
-    ldr sp, =kernel_stack
+    ldr sp, =svc_stack
     orr r1, #0b11111 //SYS
     msr cpsr, r1
     ldr sp, =kernel_stack
@@ -121,9 +121,12 @@ _start:
     blx start
 
 .section .bss
+.align 16
 .space 4096
 interrupt_stack:
 .space 4096
 exception_stack:
+.space 4096
+svc_stack:
 .space 16384
 kernel_stack:

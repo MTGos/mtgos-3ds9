@@ -42,6 +42,7 @@ extern "C" cpu_state *handleINT(int number, cpu_state *state) {
         else
             state->returnAddr -= 4;
     }
+    out->puti(state->cpsr);
     return state;
 }
 extern "C" void panic2(char *msg, cpu_state *state) {

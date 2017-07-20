@@ -5,13 +5,12 @@
 
 PICAfb term;
 void main();
-extern "C" void start() { main(); }
+extern "C" void start() { main();
+    for(;;);
+}
 void drivers_init() {
-    term << "initing main tty\n";
     setMainTTY(&term);
     --term;
-    term << "Initing vectors\n";
     initVectors();
-    term << "trying svc\n";
     asm volatile("svc #0");
 }
