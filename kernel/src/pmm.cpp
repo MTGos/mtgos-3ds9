@@ -11,7 +11,7 @@ auto PMM::isFree(phys_t addr) -> bool {
         return false;
     return true;
 }
-PMM::PMM(phys_t page_size): page_size(page_size), head(nullptr) {}
+PMM::PMM(phys_t page_size): page_size(page_size), head(nullptr), lowest_page(~0), highest_page(0) {}
 void PMM::fill() {
     for(phys_t i=lowest_page; i<highest_page+1; i+=page_size) {
         if(isFree(i))
