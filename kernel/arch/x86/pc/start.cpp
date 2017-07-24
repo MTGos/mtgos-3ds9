@@ -8,6 +8,7 @@
 #include "../../../hw/pc/8259/pic.hpp"
 #include "../../../hw/pc/idt/idt.hpp"
 #include "../../../hw/pc/pmm/pmm.hpp"
+
 #include <base.hpp>
 static multiboot_info_t *mb_info;
 #ifndef ENABLE_FRAMEBUFFER
@@ -28,5 +29,4 @@ void drivers_init() {
     initIDT();
     PIC::initPIC(0x20, 0x28);
     asm volatile("sti");
-    asm volatile("int $0x20");
 }

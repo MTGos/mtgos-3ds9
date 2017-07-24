@@ -1,5 +1,6 @@
 #include "pic.hpp"
 #include "../io.hpp"
+#include <regs.h>
 #define PIC1 0x20
 #define PIC2 0xA0
 #define PIC1_COMMAND PIC1
@@ -19,6 +20,33 @@
 #define ICW4_BUF_SLAVE 0x04
 #define ICW4_BUF_MASTER 0x0C
 #define ICW4_SFNM 0x10
+IRQ_PIC::IRQ_PIC() {
+    PIC::initPIC(0x20, 0x28);
+}
+IRQ_PIC::~IRQ_PIC() {
+    PIC::disable();
+}
+void* IRQ_PIC::handleIRQ(void *data) {
+    cpu_state* cpu = (cpu_state*)data;
+    auto val = handlers[cpu->intr-0x20](data);
+    PIC::sendEOI(cpu->intr > 0x27);
+    return val;
+}
+void IRQ_PIC::mask(int number) {
+    PIC::mask(number);
+}
+void IRQ_PIC::unmask(int number) {
+    PIC::unmask(number);
+}
+static IRQ_PIC irqpic;
+__attribute__((constructor))
+static void initIRQ() {
+    irqs = &irqpic;
+    //Init pic
+    out<uint8_t>(0x43, 0x34);
+    out<uint8_t>(0x40, 156);
+    out<uint8_t>(0x40, 46);
+}
 namespace PIC {
 auto sendEOI(bool slave) -> void {
     if (slave) { out<unsigned char>(PIC2_COMMAND, PIC_EOI); }

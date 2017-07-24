@@ -24,3 +24,33 @@ void initVectors() {
     vectors[10] = branch_macro;
     vectors[11] = (uintptr_t)&data_abort;
 }
+
+IRQ_IO::IRQ_IO() {
+    *((volatile uint32_t*)0x17E00100)=1;
+    *((volatile uint32_t*)0x17E00104)=0xF0;
+    for(int i=0;i<32;i+=4) {
+        *((volatile uint32_t*)(0x7E01100+i))=~0;
+    }
+    uint32_t intid;
+    while((intid=*((volatile uint32_t*)0x7E00118))!=1023) {
+        *((volatile uint32_t*)0x7E00110)=intid;
+    }
+}
+IRQ_IO::~IRQ_IO() {}
+
+void IRQ_IO::handleIRQ(void *data) {
+    uint32_t interrupt=*((volatile uint32_t*)0x7E0010C);
+    int intid = interrupt & 255;
+    data = handlers[intid](data);
+    *((volatile uint32_t*)0x7E00110) = interrupt;
+    return data;
+}
+
+void IRQ_IO::mask(int number) {}
+void IRQ_IO::unmask(int number) {}
+
+static IRQ_IO irq;
+__attribute__((constructor))
+static void init_irq() {
+    irqs = (IRQ*)&irq;
+}

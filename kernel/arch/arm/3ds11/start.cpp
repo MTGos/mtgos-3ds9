@@ -14,5 +14,7 @@ void drivers_init() {
     setMainTTY(&term);
     --term;
     initVectors();
-    asm volatile("svc #0");
+    *((volatile uint32_t*)0x17E00600)=67108;
+    *((volatile uint32_t*)0x17E00608=3;
+    asm volatile("CPSIE aif");
 }

@@ -29,5 +29,4 @@ void drivers_init() {
     initIDT();
     PIC::initPIC(0x20, 0x28);
     asm volatile("sti");
-    asm volatile("int $32");
 }

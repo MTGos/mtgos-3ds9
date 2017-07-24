@@ -9,8 +9,6 @@ void svc_call();
 void undefined_op();
 void flushAll();
 }
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void initVectors() {
     uintptr_t *vectors = (uintptr_t *)0x08000000;
     // branch_macro is a ldr pc, [pc,#-4], meaning it reads the following word as PC
@@ -28,4 +26,31 @@ void initVectors() {
     vectors[11] = (uintptr_t)&data_abort;
     flushAll();
 }
-#pragma GCC pop_options
+
+IRQ_IO::IRQ_IO() {
+    *((volatile uint32_t*)0x10001000)=~0;
+    *((volatile uint32_t*)0x10001004)=0;
+}
+IRQ_IO::~IRQ_IO() {}
+
+void* IRQ_IO::handleIRQ(void *data) {
+    //Call IRQ handlers until all IRQs are done.
+    int bit;
+    while(bit=__builtin_ffs(*((volatile int*)0x10001004))) {
+        data = handlers[bit-1](data);
+        *((volatile int*)0x10001004)&=~(1<<(bit-1));
+    }
+    return data;
+}
+
+void IRQ_IO::mask(int number) {
+    *((volatile int*)0x10001004)&=~(1<<number);
+}
+void IRQ_IO::unmask(int number) {
+    *((volatile int*)0x10001004)|=1<<number;
+}
+static IRQ_IO irq;
+__attribute__((constructor))
+static void init_irq() {
+    irqs = (IRQ*)&irq;
+}
