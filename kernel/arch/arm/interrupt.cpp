@@ -37,7 +37,6 @@ extern "C" cpu_state *handleINT(int number, cpu_state *state) {
             else
                 state->returnAddr -= 4;
     }
-    print_regdump(state);
     cpu_state *new_cpu = state;
     switch(number) {
         case 1:
