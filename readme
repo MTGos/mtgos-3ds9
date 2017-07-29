@@ -2,8 +2,7 @@ to build mtgos you need the cross compilers, whose makefile is included in cross
 
 Quick walkthrough of the steps needed for building:
 
-1) ./config.py - this will ask you a couple questions needed for building and create a appropriate config.cmake and config.h
-2) mkdir -pv build; cd build - this will enter a build directory, as an in-dir build is not supported
-3) cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/<toolchain name here>.cmake ..
-4) make
-5) Kernel is in kernel/kernel
+1) mkdir -pv build; cd build - this will enter a build directory, as an in-dir build is not supported
+2) cmake -DCMAKE_TOOLCHAIN_FILE=../toolchains/arm-none-eabi.cmake ..
+3) make
+4) Kernel is in kernel/kernel
