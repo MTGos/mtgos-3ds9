@@ -3,9 +3,6 @@ gcc/
 binutils/
 gawk/
 builddir/
-config.cmake
-config.h
-gen*.h
 build/
 __pycache__/
 *.iso
