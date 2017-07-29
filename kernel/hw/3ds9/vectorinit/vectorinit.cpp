@@ -1,4 +1,5 @@
 #include "vectorinit.hpp"
+#include <base.hpp>
 extern "C" {
 extern uintptr_t branch_macro;
 void data_abort();
@@ -26,10 +27,10 @@ void initVectors() {
     vectors[11] = (uintptr_t)&data_abort;
     flushAll();
 }
-
 IRQ_IO::IRQ_IO() {
+    initVectors();
     *((volatile uint32_t*)0x10001000)=~0;
-    *((volatile uint32_t*)0x10001004)=0;
+    *((volatile uint32_t*)0x10001004)=~0;
 }
 IRQ_IO::~IRQ_IO() {}
 
@@ -38,7 +39,7 @@ void* IRQ_IO::handleIRQ(void *data) {
     int bit;
     while(bit=__builtin_ffs(*((volatile int*)0x10001004))) {
         data = handlers[bit-1](data);
-        *((volatile int*)0x10001004)&=~(1<<(bit-1));
+        *((volatile int*)0x10001004)=(1<<(bit-1));
     }
     return data;
 }

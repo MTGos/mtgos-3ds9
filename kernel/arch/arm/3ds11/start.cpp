@@ -13,8 +13,7 @@ void drivers_init() {
     pmm=(PMM*)(&lpmm);
     setMainTTY(&term);
     --term;
-    initVectors();
     *((volatile uint32_t*)0x17E00600)=67108;
-    *((volatile uint32_t*)0x17E00608=3;
+    *((volatile uint32_t*)0x17E00608)=3;
     asm volatile("CPSIE aif");
 }

@@ -15,19 +15,19 @@ _start:
     mov r1, r2
     orr r1, #0b10001 //FIQ
     msr cpsr, r1
-    ldr sp, =interrupt_stack
+    ldr sp, =fiq_stack
     mov r1, r2
     orr r1, #0b10010 //IRQ
     msr cpsr, r1
-    ldr sp, =interrupt_stack
+    ldr sp, =irq_stack
     mov r1, r2
     orr r1, #0b10111 //Abort
     msr cpsr, r1
-    ldr sp, =exception_stack
+    ldr sp, =abt_stack
     mov r1, r2
     orr r1, #0b11011 //Undefined
     msr cpsr, r1
-    ldr sp, =exception_stack
+    ldr sp, =und_stack
     orr r1, #0b11111 //SYS
     msr cpsr, r1
     ldr sp, =kernel_stack
@@ -45,9 +45,13 @@ _start:
 .section .bss
 .align 16
 .space 4096
-interrupt_stack:
+fiq_stack:
 .space 4096
-exception_stack:
+irq_stack:
+.space 4096
+abt_stack:
+.space 4096
+und_stack:
 .space 4096
 svc_stack:
 .space 16384

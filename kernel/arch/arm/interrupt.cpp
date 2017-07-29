@@ -1,5 +1,6 @@
 #include "include/regs.h"
 #include <base.hpp>
+#include <irq.hpp>
 void print_regdump(cpu_state *state) {
     (*out << "r0: ").puti(state->r0);
     (*out << " r1: ").puti(state->r1);
@@ -21,29 +22,33 @@ void print_regdump(cpu_state *state) {
     (*out << " returnAddr: ").puti(state->returnAddr);
     *out << "\n";
 }
+extern "C" void panic2(char *msg, cpu_state *state);
 extern "C" cpu_state *handleINT(int number, cpu_state *state) {
     *out << "Interrupt";
     out->puti(number);
     *out << " occurred!\n";
-    if (number != 4) {
-        out->setColor(Color::RED);
-        print_regdump(state);
-        *out << "KERNEL PANIC: Unhandled CPU exception\n";
-        for (;;);
-    } else {
+    switch(number) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            if(state->cpsr & 0x20)
+                state->returnAddr -= 2;
+            else
+                state->returnAddr -= 4;
     }
-    switch (number) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-        if (state->cpsr & 0x20)
-            state->returnAddr -= 2;
-        else
-            state->returnAddr -= 4;
+    print_regdump(state);
+    cpu_state *new_cpu = state;
+    switch(number) {
+        case 1:
+        case 2:
+            new_cpu = (cpu_state*)irqs->handleIRQ(new_cpu);
+        case 4:
+            break;
+        default:
+            panic2("Unhandled CPU exception!", state);
     }
-    out->puti(state->cpsr);
-    return state;
+    return new_cpu;
 }
 extern "C" void panic2(char *msg, cpu_state *state) {
     out->setColor(Color::RED);

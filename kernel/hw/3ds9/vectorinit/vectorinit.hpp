@@ -2,8 +2,7 @@
 #include <stdint.h>
 #include <irq.hpp>
 void initVectors();
-
-struct IRQ_IO {
+struct IRQ_IO: IRQ {
     IRQ_IO();
     virtual ~IRQ_IO();
     virtual void* handleIRQ(void *data);

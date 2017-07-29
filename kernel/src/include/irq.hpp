@@ -7,7 +7,7 @@ constexpr int get_max_irq() {
     if constexpr(same_string(ARCH, "x86") || same_string(ARCH, "x86_64")) {
         return 32;
     } else if constexpr(same_string(SYSTEM, "3ds9")) {
-        return 30;
+        return 32;
     } else if constexpr(same_string(SYSTEM, "3ds11")) {
         return 256;
     } else {
