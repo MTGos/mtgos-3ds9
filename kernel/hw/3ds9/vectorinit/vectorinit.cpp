@@ -37,7 +37,7 @@ IRQ_IO::~IRQ_IO() {}
 void* IRQ_IO::handleIRQ(void *data) {
     //Call IRQ handlers until all IRQs are done.
     int bit;
-    while(bit=__builtin_ffs(*((volatile int*)0x10001004))) {
+    while((bit=__builtin_ffs(*((volatile int*)0x10001004)))) {
         data = handlers[bit-1](data);
         *((volatile int*)0x10001004)=(1<<(bit-1));
     }
