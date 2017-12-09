@@ -7,15 +7,15 @@ void *operator new(size_t s) {
 void *operator new[](size_t s) {
     return (void*)(*pmm, (s+4095)/4096);
 }
-void *operator delete(void *p) {
+void operator delete(void *p) {
     (*pmm)((phys_t)p,1);
 }
-void *operator delete[](void *p) {
+void operator delete[](void *p) {
     (*pmm)((phys_t)p,1);
 }
-void *operator delete(void *p, size_t s) {
+void operator delete(void *p, size_t s) {
     (*pmm)((phys_t)p,(s+4095)/4096);
 }
-void *operator delete[](void *p, size_t s) {
+void operator delete[](void *p, size_t s) {
     (*pmm)((phys_t)p,(s+4095)/4096);
 }

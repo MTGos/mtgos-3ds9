@@ -1,5 +1,6 @@
 #pragma once
 #include <function.hpp>
+#include <stdint.h>
 struct PXIcmd {
     uint32_t conid;
     uint32_t cmdid;
@@ -23,13 +24,11 @@ struct PXI {
     function<PXIreply(PXIcmd)> pxi_handlers[16];
     uint32_t connid;
     PXI();
-    ~PXI();
 
     void set_cmd_handler(uint32_t cmd, function<PXIreply(PXIcmd)> handler);
-    void send_cmd(PXIcmd command, function<void(PXIreplay)> callback);
+    void send_cmd(PXIcmd command, function<void(PXIreply)> callback);
     void main_loop();
 
-    void 
 };
 
 extern PXI pxi;
