@@ -42,13 +42,13 @@ auto PMM::operator,(size_t no_pages) -> phys_t {
     PMM_ent *curr=head;
     while(curr) {
         //Is curr+n pages free?
-        if((curr->val+((no_pages-1)*page_size)) in this) {
+        if((curr->val+((no_pages-1)*page_size)) in *this) {
            //We're onto something
            bool notfound=false;
            phys_t i;
            size_t j;
            for(i=curr->val,j=0; j<no_pages; i+=page_size, j++) {
-               if(!(i in this)) {
+               if(!(i in *this)) {
                    notfound=true;
                    break;
                }
